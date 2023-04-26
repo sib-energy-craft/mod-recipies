@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "sec-mod-recipes",
+  "version": "0.0.1",
+  "name": "SibEnergyCraft - recipes definition",
+  "authors": [
+    "sibmaks"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "environment": "*",
+  "depends": {
+    "fabricloader": ">=0.14.17",
+    "fabric": "*",
+    "minecraft": "1.19.4"
+  },
+  "entrypoints": {
+    "main": [
+      "com.github.sib_energy_craft.recipes.load.Loader"
+    ]
+  }
+}
