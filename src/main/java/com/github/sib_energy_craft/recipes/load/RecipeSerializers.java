@@ -2,10 +2,7 @@ package com.github.sib_energy_craft.recipes.load;
 
 import com.github.sib_energy_craft.energy_api.utils.Identifiers;
 import com.github.sib_energy_craft.machines.recipe.CookingRecipeSerializer;
-import com.github.sib_energy_craft.recipes.recipe.ExtractingRecipe;
-import com.github.sib_energy_craft.recipes.recipe.IronCraftingTableRecipe;
-import com.github.sib_energy_craft.recipes.recipe.MaceratingRecipe;
-import com.github.sib_energy_craft.recipes.recipe.ShapedRecipeCharged;
+import com.github.sib_energy_craft.recipes.recipe.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.recipe.RecipeSerializer;
@@ -35,6 +32,6 @@ public final class RecipeSerializers {
         SHAPED_CHARGED = register(Identifiers.asString("crafting_shaped_charged"), shapedChargedRecipeSerializer);
 
         var ironCraftingTableRecipeSerializer = new IronCraftingTableRecipe.Serializer();
-        IRON_CRAFTING_TABLE_RECIPE_RECIPE = register(IronCraftingTableRecipe.Type.ID, ironCraftingTableRecipeSerializer);
+        IRON_CRAFTING_TABLE_RECIPE_RECIPE = register(IronCraftingTableRecipeType.ID, ironCraftingTableRecipeSerializer);
     }
 }

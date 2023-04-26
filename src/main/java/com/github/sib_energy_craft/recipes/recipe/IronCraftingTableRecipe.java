@@ -1,11 +1,8 @@
 package com.github.sib_energy_craft.recipes.recipe;
 
-import com.github.sib_energy_craft.energy_api.utils.Identifiers;
 import com.google.gson.JsonObject;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -21,11 +18,6 @@ import net.minecraft.world.World;
  */
 @AllArgsConstructor
 public class IronCraftingTableRecipe implements Recipe<CraftingInventory> {
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Type implements RecipeType<IronCraftingTableRecipe> {
-        public static final String ID = Identifiers.asString("iron_crafting_table_tool");
-        public static final Type INSTANCE = new Type();
-    }
 
     @Getter
     private final Identifier id;
@@ -67,7 +59,7 @@ public class IronCraftingTableRecipe implements Recipe<CraftingInventory> {
 
     @Override
     public RecipeType<?> getType() {
-        return Type.INSTANCE;
+        return IronCraftingTableRecipeType.INSTANCE;
     }
 
     public static class Serializer implements RecipeSerializer<IronCraftingTableRecipe> {
