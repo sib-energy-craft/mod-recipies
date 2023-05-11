@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "sec-mod-recipes",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "name": "SibEnergyCraft - recipes definition",
   "authors": [
     "sibmaks"
@@ -16,7 +16,8 @@
   },
   "entrypoints": {
     "main": [
-      "com.github.sib_energy_craft.recipes.load.Loader"
+      "com.github.sib_energy_craft.recipes.load.RecipeSerializers",
+      "com.github.sib_energy_craft.recipes.load.RecipeTypes"
     ]
   }
 }

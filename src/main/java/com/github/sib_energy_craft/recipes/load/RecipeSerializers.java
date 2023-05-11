@@ -4,8 +4,7 @@ import com.github.sib_energy_craft.energy_api.utils.Identifiers;
 import com.github.sib_energy_craft.machines.recipe.CookingRecipeSerializer;
 import com.github.sib_energy_craft.recipes.recipe.*;
 import com.github.sib_energy_craft.recipes.recipe.serializer.CompressingRecipeSerializer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.github.sib_energy_craft.sec_utils.load.DefaultModInitializer;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
 
@@ -15,8 +14,7 @@ import static net.minecraft.recipe.RecipeSerializer.register;
  * @since 0.0.1
  * @author sibmaks
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class RecipeSerializers {
+public final class RecipeSerializers implements DefaultModInitializer {
     public static final CookingRecipeSerializer<ExtractingRecipe> EXTRACTING;
     public static final CookingRecipeSerializer<MaceratingRecipe> MACERATING;
     public static final CompressingRecipeSerializer COMPRESSING;
