@@ -54,7 +54,7 @@ public class IronCraftingTableRecipe implements Recipe<CraftingInventory> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return null;
+        return new Serializer();
     }
 
     @Override
