@@ -1,5 +1,6 @@
 package com.github.sib_energy_craft.recipes.recipe;
 
+import com.github.sib_energy_craft.recipes.load.RecipeSerializers;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -54,7 +55,7 @@ public class IronCraftingTableRecipe implements Recipe<CraftingInventory> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return new Serializer();
+        return RecipeSerializers.IRON_CRAFTING_TABLE_RECIPE_RECIPE;
     }
 
     @Override
