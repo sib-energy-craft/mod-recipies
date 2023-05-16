@@ -4,7 +4,7 @@ import com.github.sib_energy_craft.recipes.load.RecipeSerializers;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.*;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
  * @author sibmaks
  */
 @AllArgsConstructor
-public class IronCraftingTableRecipe implements Recipe<CraftingInventory> {
+public class IronCraftingTableRecipe implements Recipe<Inventory> {
 
     @Getter
     private final Identifier id;
@@ -31,7 +31,7 @@ public class IronCraftingTableRecipe implements Recipe<CraftingInventory> {
     private final ItemStack output;
 
     @Override
-    public boolean matches(CraftingInventory inventory, World world) {
+    public boolean matches(Inventory inventory, World world) {
         if(inventory.size() < 2) {
             return false;
         }
@@ -39,7 +39,7 @@ public class IronCraftingTableRecipe implements Recipe<CraftingInventory> {
     }
 
     @Override
-    public ItemStack craft(CraftingInventory inventory, DynamicRegistryManager registryManager) {
+    public ItemStack craft(Inventory inventory, DynamicRegistryManager registryManager) {
         return this.output.copy();
     }
 
