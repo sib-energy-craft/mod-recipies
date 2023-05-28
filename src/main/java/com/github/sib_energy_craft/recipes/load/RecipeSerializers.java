@@ -20,6 +20,7 @@ public final class RecipeSerializers implements DefaultModInitializer {
     public static final CompressingRecipeSerializer COMPRESSING;
     public static final RecipeSerializer<ShapedRecipe> SHAPED_CHARGED;
     public static final RecipeSerializer<IronCraftingTableRecipe> IRON_CRAFTING_TABLE_RECIPE_RECIPE;
+    public static final RecipeSerializer<PurifyingRecipe> PURIFYING_RECIPE_RECIPE;
 
     static {
         var extractingRecipeSerializer = new CookingRecipeSerializer<>(ExtractingRecipe::new, 100);
@@ -36,5 +37,8 @@ public final class RecipeSerializers implements DefaultModInitializer {
 
         var ironCraftingTableRecipeSerializer = new IronCraftingTableRecipe.Serializer();
         IRON_CRAFTING_TABLE_RECIPE_RECIPE = register(IronCraftingTableRecipeType.ID, ironCraftingTableRecipeSerializer);
+
+        var purifyingRecipeSerializer = new PurifyingRecipe.Serializer();
+        PURIFYING_RECIPE_RECIPE = register(PurifyingRecipeType.ID, purifyingRecipeSerializer);
     }
 }
