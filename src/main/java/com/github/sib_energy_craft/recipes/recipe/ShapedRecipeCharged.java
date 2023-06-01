@@ -3,7 +3,7 @@ package com.github.sib_energy_craft.recipes.recipe;
 import com.github.sib_energy_craft.energy_api.items.ChargeableItem;
 import com.github.sib_energy_craft.recipes.load.RecipeSerializers;
 import com.google.gson.JsonObject;
-import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
@@ -23,12 +23,12 @@ public class ShapedRecipeCharged extends ShapedRecipe {
     }
 
     @Override
-    public ItemStack craft(CraftingInventory craftingInventory, DynamicRegistryManager dynamicRegistryManager) {
+    public ItemStack craft(RecipeInputInventory recipeInputInventory, DynamicRegistryManager dynamicRegistryManager) {
         var itemStack = getOutput(dynamicRegistryManager).copy();
         var charge = 0;
-        var size = craftingInventory.size();
+        var size = recipeInputInventory.size();
         for(int slot = 0; slot < size; slot++) {
-            var input = craftingInventory.getStack(slot);
+            var input = recipeInputInventory.getStack(slot);
             if(itemStack.getItem() instanceof ChargeableItem chargeableItem) {
                 charge += chargeableItem.getCharge(input);
             }
