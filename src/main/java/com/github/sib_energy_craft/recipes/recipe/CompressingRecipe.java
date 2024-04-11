@@ -62,7 +62,7 @@ public class CompressingRecipe implements Recipe<Inventory> {
     @Override
     public boolean matches(@NotNull Inventory inventory,
                            @NotNull World world) {
-        ItemStack sourceSlot = inventory.getStack(0);
+        var sourceSlot = inventory.getStack(0);
         return this.input.isOf(sourceSlot.getItem()) && sourceSlot.getCount() >= this.input.getCount();
     }
 

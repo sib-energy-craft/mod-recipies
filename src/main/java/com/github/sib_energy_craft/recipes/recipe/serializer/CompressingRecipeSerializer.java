@@ -26,7 +26,7 @@ public final class CompressingRecipeSerializer implements RecipeSerializer<Compr
                                 CookingRecipeCategory.CODEC.fieldOf("category")
                                         .orElse(CookingRecipeCategory.MISC)
                                         .forGetter(CompressingRecipe::getCategory),
-                                ItemStack.INGREDIENT_ENTRY_CODEC.fieldOf("ingredient")
+                                ItemStack.RECIPE_RESULT_CODEC.fieldOf("ingredient")
                                         .forGetter(CompressingRecipe::getInput),
                                 ItemStack.RECIPE_RESULT_CODEC.fieldOf("result")
                                         .forGetter(CompressingRecipe::getOutput),
