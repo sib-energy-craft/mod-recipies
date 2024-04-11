@@ -16,6 +16,8 @@ import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
+import java.util.Optional;
+
 /**
  * Recipe for using in ore purifying machine, to purify ore with additional income.
  *
@@ -30,7 +32,7 @@ public class PurifyingRecipe implements Recipe<Inventory> {
     private final Ingredient source;
     private final ItemStack outputMain;
     private final ItemStack outputSide;
-    private final ItemStack outputTrash;
+    private final Optional<ItemStack> outputTrash;
     private final int cookingTime;
 
     @Override
@@ -51,7 +53,9 @@ public class PurifyingRecipe implements Recipe<Inventory> {
     }
 
     public ItemStack craftTrash() {
-        return this.outputTrash.copy();
+        return this.outputTrash
+                .orElse(ItemStack.EMPTY)
+                .copy();
     }
 
     @Override
@@ -88,7 +92,7 @@ public class PurifyingRecipe implements Recipe<Inventory> {
                                             .forGetter(PurifyingRecipe::getOutputMain),
                                     ItemStack.RECIPE_RESULT_CODEC.fieldOf("outputSide")
                                             .forGetter(PurifyingRecipe::getOutputSide),
-                                    ItemStack.RECIPE_RESULT_CODEC.fieldOf("outputTrash")
+                                    ItemStack.RECIPE_RESULT_CODEC.optionalFieldOf("outputTrash")
                                             .forGetter(PurifyingRecipe::getOutputTrash),
                                     Codec.INT.fieldOf("cookingtime")
                                             .orElse(defaultCookingTime)
@@ -104,7 +108,7 @@ public class PurifyingRecipe implements Recipe<Inventory> {
             var source = Ingredient.fromPacket(packetByteBuf);
             var outputMain = packetByteBuf.readItemStack();
             var outputSide = packetByteBuf.readItemStack();
-            var outputTrash = packetByteBuf.readItemStack();
+            var outputTrash = packetByteBuf.readOptional(PacketByteBuf::readItemStack);
             var cookingTime = packetByteBuf.readInt();
             return new PurifyingRecipe(group, source, outputMain, outputSide, outputTrash, cookingTime);
         }
@@ -115,7 +119,7 @@ public class PurifyingRecipe implements Recipe<Inventory> {
             recipe.source.write(packetByteBuf);
             packetByteBuf.writeItemStack(recipe.outputMain);
             packetByteBuf.writeItemStack(recipe.outputSide);
-            packetByteBuf.writeItemStack(recipe.outputTrash);
+            packetByteBuf.writeOptional(recipe.outputTrash, PacketByteBuf::writeItemStack);
             packetByteBuf.writeInt(recipe.cookingTime);
         }
 
