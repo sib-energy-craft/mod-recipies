@@ -11,7 +11,6 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.book.CookingRecipeCategory;
 import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
 
 /**
  * @author sibmaks
@@ -20,14 +19,13 @@ import net.minecraft.util.Identifier;
 public class MaceratingRecipe extends OpenAbstractCookingRecipe {
     private final Item icon;
 
-    public MaceratingRecipe(Identifier id,
-                            String group,
+    public MaceratingRecipe(String group,
                             CookingRecipeCategory category,
                             Ingredient input,
                             ItemStack output,
                             float experience,
                             int cookTime) {
-        super(RecipeTypes.MACERATING, id, group, category, input, output, experience, cookTime);
+        super(RecipeTypes.MACERATING, group, category, input, output, experience, cookTime);
         var itemId = Identifiers.of("macerator");
         this.icon = Registries.ITEM.getOrEmpty(itemId)
                 .orElse(Items.CRAFTING_TABLE);

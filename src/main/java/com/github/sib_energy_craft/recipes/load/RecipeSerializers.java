@@ -7,12 +7,13 @@ import com.github.sib_energy_craft.recipes.recipe.serializer.CompressingRecipeSe
 import com.github.sib_energy_craft.sec_utils.load.DefaultModInitializer;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.recipe.ShapedRecipeCharged;
 
 import static net.minecraft.recipe.RecipeSerializer.register;
 
 /**
- * @since 0.0.1
  * @author sibmaks
+ * @since 0.0.1
  */
 public final class RecipeSerializers implements DefaultModInitializer {
     public static final CookingRecipeSerializer<ExtractingRecipe> EXTRACTING;
@@ -23,10 +24,18 @@ public final class RecipeSerializers implements DefaultModInitializer {
     public static final RecipeSerializer<PurifyingRecipe> PURIFYING_RECIPE_RECIPE;
 
     static {
-        var extractingRecipeSerializer = new CookingRecipeSerializer<>(ExtractingRecipe::new, 100);
+        var extractingRecipeSerializer = new CookingRecipeSerializer<>(
+                ExtractingRecipe::new,
+                ExtractingRecipeCodecFactory.build(100),
+                100
+        );
         EXTRACTING = register(Identifiers.asString("extracting"), extractingRecipeSerializer);
 
-        var maceratingRecipeSerializer = new CookingRecipeSerializer<>(MaceratingRecipe::new, 100);
+        var maceratingRecipeSerializer = new CookingRecipeSerializer<>(
+                MaceratingRecipe::new,
+                MaceratingRecipeCodecFactory.build(100),
+                100
+        );
         MACERATING = register(Identifiers.asString("macerating"), maceratingRecipeSerializer);
 
         var compressingRecipeSerializer = new CompressingRecipeSerializer(100);
@@ -38,7 +47,7 @@ public final class RecipeSerializers implements DefaultModInitializer {
         var ironCraftingTableRecipeSerializer = new IronCraftingTableRecipe.Serializer();
         IRON_CRAFTING_TABLE_RECIPE_RECIPE = register(IronCraftingTableRecipeType.ID, ironCraftingTableRecipeSerializer);
 
-        var purifyingRecipeSerializer = new PurifyingRecipe.Serializer();
+        var purifyingRecipeSerializer = new PurifyingRecipe.Serializer(100);
         PURIFYING_RECIPE_RECIPE = register(PurifyingRecipeType.ID, purifyingRecipeSerializer);
     }
 }
