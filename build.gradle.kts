@@ -1,5 +1,5 @@
-import java.util.Date
 import java.text.SimpleDateFormat
+import java.util.*
 
 plugins {
     id("fabric-loom") version "1.6-SNAPSHOT"
@@ -42,7 +42,7 @@ dependencies {
     modImplementation("com.github.sib-energy-craft:energy-api:${project.property("sec_energy_api_version")}")
     modImplementation("com.github.sib-energy-craft:sec-utils:${project.property("sec_utils_version")}")
 
-    modImplementation("com.github.sib-energy-craft:energy-machines-api:${project.property("sec_energy_machines_api_version")}")
+    modImplementation("com.github.sib-energy-craft:sec-mod-api:${project.property("sec_mod_api_version")}")
 }
 
 tasks.processResources {
