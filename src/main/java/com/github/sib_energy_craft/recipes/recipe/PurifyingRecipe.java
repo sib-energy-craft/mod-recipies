@@ -1,17 +1,23 @@
 package com.github.sib_energy_craft.recipes.recipe;
 
 import com.github.sib_energy_craft.recipes.load.RecipeSerializers;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.*;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
+
+import java.util.Optional;
 
 /**
  * Recipe for using in ore purifying machine, to purify ore with additional income.
@@ -19,26 +25,20 @@ import net.minecraft.world.World;
  * @author sibmaks
  * @since 0.0.8
  */
+@Getter
 @AllArgsConstructor
 public class PurifyingRecipe implements Recipe<Inventory> {
 
-    @Getter
-    private final Identifier id;
-    @Getter
     private final String group;
-    @Getter
     private final Ingredient source;
     private final ItemStack outputMain;
-    @Getter
     private final ItemStack outputSide;
-    @Getter
-    private final ItemStack outputTrash;
-    @Getter
+    private final Optional<ItemStack> outputTrash;
     private final int cookingTime;
 
     @Override
     public boolean matches(Inventory inventory, World world) {
-        if (inventory.size() < 1) {
+        if (inventory.isEmpty()) {
             return false;
         }
         return source.test(inventory.getStack(0));
@@ -54,7 +54,9 @@ public class PurifyingRecipe implements Recipe<Inventory> {
     }
 
     public ItemStack craftTrash() {
-        return this.outputTrash.copy();
+        return this.outputTrash
+                .orElse(ItemStack.EMPTY)
+                .copy();
     }
 
     @Override
@@ -63,7 +65,7 @@ public class PurifyingRecipe implements Recipe<Inventory> {
     }
 
     @Override
-    public ItemStack getOutput(DynamicRegistryManager registryManager) {
+    public ItemStack getResult(DynamicRegistryManager registryManager) {
         return outputMain;
     }
 
@@ -78,35 +80,38 @@ public class PurifyingRecipe implements Recipe<Inventory> {
     }
 
     public static class Serializer implements RecipeSerializer<PurifyingRecipe> {
-        @Override
-        public PurifyingRecipe read(Identifier identifier, JsonObject jsonObject) {
-            var group = JsonHelper.getString(jsonObject, "group", "");
-            var sourceStack = Ingredient.fromJson(JsonHelper.getObject(jsonObject, "source"));
-            var outputMainStack = ShapedRecipe.outputFromJson(
-                    JsonHelper.getObject(jsonObject, "outputMain")
-            );
-            var outputSideStack = ShapedRecipe.outputFromJson(
-                    JsonHelper.getObject(jsonObject, "outputSide")
-            );
-            var outputTrashStack = ItemStack.EMPTY;
-            if(JsonHelper.hasJsonObject(jsonObject, "outputTrash")) {
-                outputTrashStack = ShapedRecipe.outputFromJson(
-                        JsonHelper.getObject(jsonObject, "outputTrash")
-                );
-            }
-            var cookingTime = JsonHelper.getInt(jsonObject, "cookingTime", 0);
-            return new PurifyingRecipe(identifier, group, sourceStack, outputMainStack, outputSideStack, outputTrashStack, cookingTime);
+        private final Codec<PurifyingRecipe> codec;
+
+        public Serializer(int defaultCookingTime) {
+            this.codec = RecordCodecBuilder.create(
+                    instance -> instance.group(
+                                    Codecs.createStrictOptionalFieldCodec(Codec.STRING, "group", "")
+                                            .forGetter(PurifyingRecipe::getGroup),
+                                    Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("source")
+                                            .forGetter(PurifyingRecipe::getSource),
+                                    Registries.ITEM.getCodec().xmap(ItemStack::new, ItemStack::getItem).fieldOf("outputMain")
+                                            .forGetter(PurifyingRecipe::getOutputMain),
+                                    Registries.ITEM.getCodec().xmap(ItemStack::new, ItemStack::getItem).fieldOf("outputSide")
+                                            .forGetter(PurifyingRecipe::getOutputSide),
+                                    Registries.ITEM.getCodec().xmap(ItemStack::new, ItemStack::getItem).optionalFieldOf("outputTrash")
+                                            .forGetter(PurifyingRecipe::getOutputTrash),
+                                    Codec.INT.fieldOf("cookingtime")
+                                            .orElse(defaultCookingTime)
+                                            .forGetter(PurifyingRecipe::getCookingTime)
+                            )
+                            .apply(instance, PurifyingRecipe::new));
         }
 
+
         @Override
-        public PurifyingRecipe read(Identifier identifier, PacketByteBuf packetByteBuf) {
+        public PurifyingRecipe read(PacketByteBuf packetByteBuf) {
             var group = packetByteBuf.readString();
             var source = Ingredient.fromPacket(packetByteBuf);
             var outputMain = packetByteBuf.readItemStack();
             var outputSide = packetByteBuf.readItemStack();
-            var outputTrash = packetByteBuf.readItemStack();
+            var outputTrash = packetByteBuf.readOptional(PacketByteBuf::readItemStack);
             var cookingTime = packetByteBuf.readInt();
-            return new PurifyingRecipe(identifier, group, source, outputMain, outputSide, outputTrash, cookingTime);
+            return new PurifyingRecipe(group, source, outputMain, outputSide, outputTrash, cookingTime);
         }
 
         @Override
@@ -115,8 +120,13 @@ public class PurifyingRecipe implements Recipe<Inventory> {
             recipe.source.write(packetByteBuf);
             packetByteBuf.writeItemStack(recipe.outputMain);
             packetByteBuf.writeItemStack(recipe.outputSide);
-            packetByteBuf.writeItemStack(recipe.outputTrash);
+            packetByteBuf.writeOptional(recipe.outputTrash, PacketByteBuf::writeItemStack);
             packetByteBuf.writeInt(recipe.cookingTime);
+        }
+
+        @Override
+        public Codec<PurifyingRecipe> codec() {
+            return codec;
         }
     }
 }

@@ -15,7 +15,6 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.book.CookingRecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -27,8 +26,6 @@ import org.jetbrains.annotations.NotNull;
 public class CompressingRecipe implements Recipe<Inventory> {
 
     protected final RecipeType<?> type;
-    @Getter
-    protected final Identifier id;
     @Getter
     private final CookingRecipeCategory category;
     @Getter
@@ -43,15 +40,13 @@ public class CompressingRecipe implements Recipe<Inventory> {
     protected final int cookTime;
     private final Item icon;
 
-    public CompressingRecipe(@NotNull Identifier id,
-                             @NotNull String group,
+    public CompressingRecipe(@NotNull String group,
                              @NotNull CookingRecipeCategory category,
                              @NotNull ItemStack input,
                              @NotNull ItemStack output,
                              float experience,
                              int cookTime) {
         this.type = RecipeTypes.COMPRESSING;
-        this.id = id;
         this.group = group;
         this.category = category;
         this.input = input;
@@ -67,7 +62,7 @@ public class CompressingRecipe implements Recipe<Inventory> {
     @Override
     public boolean matches(@NotNull Inventory inventory,
                            @NotNull World world) {
-        ItemStack sourceSlot = inventory.getStack(0);
+        var sourceSlot = inventory.getStack(0);
         return this.input.isOf(sourceSlot.getItem()) && sourceSlot.getCount() >= this.input.getCount();
     }
 
@@ -83,7 +78,7 @@ public class CompressingRecipe implements Recipe<Inventory> {
     }
 
     @Override
-    public ItemStack getOutput(@NotNull DynamicRegistryManager registryManager) {
+    public ItemStack getResult(@NotNull DynamicRegistryManager registryManager) {
         return output;
     }
 
