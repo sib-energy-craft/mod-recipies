@@ -8,12 +8,8 @@ import lombok.Getter;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.World;
 
@@ -89,11 +85,11 @@ public class PurifyingRecipe implements Recipe<Inventory> {
                                             .forGetter(PurifyingRecipe::getGroup),
                                     Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("source")
                                             .forGetter(PurifyingRecipe::getSource),
-                                    Registries.ITEM.getCodec().xmap(ItemStack::new, ItemStack::getItem).fieldOf("outputMain")
+                                    RecipeCodecs.CRAFTING_RESULT.fieldOf("outputMain")
                                             .forGetter(PurifyingRecipe::getOutputMain),
-                                    Registries.ITEM.getCodec().xmap(ItemStack::new, ItemStack::getItem).fieldOf("outputSide")
+                                    RecipeCodecs.CRAFTING_RESULT.fieldOf("outputSide")
                                             .forGetter(PurifyingRecipe::getOutputSide),
-                                    Registries.ITEM.getCodec().xmap(ItemStack::new, ItemStack::getItem).optionalFieldOf("outputTrash")
+                                    RecipeCodecs.CRAFTING_RESULT.optionalFieldOf("outputTrash")
                                             .forGetter(PurifyingRecipe::getOutputTrash),
                                     Codec.INT.fieldOf("cookingtime")
                                             .orElse(defaultCookingTime)

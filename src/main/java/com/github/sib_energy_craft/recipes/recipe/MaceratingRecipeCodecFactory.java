@@ -4,10 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.recipe.RecipeCodecs;
 import net.minecraft.recipe.book.CookingRecipeCategory;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.dynamic.Codecs;
 
 /**
@@ -27,7 +26,7 @@ public final class MaceratingRecipeCodecFactory {
                                         .forGetter(MaceratingRecipe::getCategory),
                                 Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("ingredient")
                                         .forGetter(MaceratingRecipe::getInput),
-                                Registries.ITEM.getCodec().xmap(ItemStack::new, ItemStack::getItem).fieldOf("result")
+                                RecipeCodecs.CRAFTING_RESULT.fieldOf("result")
                                         .forGetter(MaceratingRecipe::getOutput),
                                 Codec.FLOAT.fieldOf("experience")
                                         .orElse(0.0f)

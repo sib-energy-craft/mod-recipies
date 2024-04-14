@@ -10,10 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.*;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.dynamic.Codecs;
@@ -102,7 +99,7 @@ public class IronCraftingTableRecipe implements Recipe<Inventory> {
                                             .forGetter(IronCraftingTableRecipe::getTool),
                                     Ingredient.DISALLOW_EMPTY_CODEC.fieldOf("source")
                                             .forGetter(IronCraftingTableRecipe::getSource),
-                                    Registries.ITEM.getCodec().xmap(ItemStack::new, ItemStack::getItem).fieldOf("output")
+                                    RecipeCodecs.CRAFTING_RESULT.fieldOf("output")
                                             .forGetter(IronCraftingTableRecipe::getOutput)
                             )
                             .apply(instance, IronCraftingTableRecipe::new));
